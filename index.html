@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Legal Operations Matter Intake & Tracking Application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --primary: #1f3b6f;
+      --accent: #3c7dd9;
+      --text-main: #1b2430;
+      --text-muted: #6b7280;
+      --border: #d1d5db;
+      --danger: #b91c1c;
+      --warning: #b45309;
+      --success: #166534;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: var(--primary);
+    }
+
+    header p {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: #e5e7eb;
+      color: var(--text-muted);
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      padding: 8px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    nav button.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1.6fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e5e7eb;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    .card h3 {
+      margin: 16px 0 8px;
+      font-size: 15px;
+      color: var(--text-main);
+    }
+
+    .card p {
+      margin: 4px 0 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .form-row label {
+      font-size: 13px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .form-row small {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 13px;
+      outline: none;
+      background: #f9fafb;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    input[type="file"] {
+      font-size: 12px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .submit-row {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13px;
+      cursor: default;
+      opacity: 0.9;
+    }
+
+    .btn-primary:disabled {
+      cursor: default;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .kpi-card {
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-value {
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .kpi-urgent .kpi-value {
+      color: var(--danger);
+    }
+
+    .kpi-pastdue .kpi-value {
+      color: var(--warning);
+    }
+
+    .kpi-upcoming .kpi-value {
+      color: var(--accent);
+    }
+
+    .kpi-awaiting .kpi-value {
+      color: var(--primary);
+    }
+
+    .search-row {
+      display: flex;
+      gap: 8px;
+      margin: 8px 0 12px;
+    }
+
+    .search-row input {
+      flex: 1;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .filter-row select {
+      min-width: 120px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    thead {
+      background: #f3f4f6;
+    }
+
+    th, td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .pill-priority-urgent {
+      background: #fef2f2;
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+
+    .pill-priority-important {
+      background: #fffbeb;
+      color: var(--warning);
+      border-color: #fde68a;
+    }
+
+    .pill-priority-routine {
+      background: #ecfdf5;
+      color: var(--success);
+      border-color: #bbf7d0;
+    }
+
+    .pill-status-new {
+      background: #eff6ff;
+      color: var(--primary);
+      border-color: #bfdbfe;
+    }
+
+    .pill-status-progress {
+      background: #e0f2fe;
+      color: #0369a1;
+      border-color: #bae6fd;
+    }
+
+    .pill-status-delayed {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .pill-status-completed {
+      background: #ecfdf5;
+      color: var(--success);
+      border-color: #bbf7d0;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .timeline {
+      border-left: 2px solid #e5e7eb;
+      padding-left: 10px;
+      margin-top: 6px;
+    }
+
+    .timeline-item {
+      margin-bottom: 10px;
+    }
+
+    .timeline-item span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .timeline-item strong {
+      font-size: 12px;
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <h1>Legal Operations Matter Intake &amp; Tracking Application</h1>
+        <p>Fictional U.S. publicly traded company &mdash; internal legal department interface (AI-designed prototype).</p>
+      </div>
+      <div class="badge">Demo &middot; Non-production &middot; Fictional data only</div>
+    </header>
+
+    <nav>
+      <button class="active">Intake Form</button>
+      <button>Dashboard</button>
+      <button>Matters List</button>
+      <button>Matter Detail</button>
+      <button>Overview</button>
+    </nav>
+
+    <div class="layout">
+      <!-- LEFT COLUMN: INTAKE FORM + DETAIL -->
+      <div>
+        <div class="card">
+          <h2>Reach Out to Legal &mdash; Matter Intake Form</h2>
+          <p>This internal form centralizes all legal requests and routes them to Legal Operations for triage, assignment, and tracking.</p>
+
+          <h3>Requestor Information</h3>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Requestor Name *</label>
+              <input type="text" placeholder="e.g., Jordan Ellis">
+            </div>
+            <div class="form-row">
+              <label>Title *</label>
+              <input type="text" placeholder="e.g., Senior Product Manager">
+            </div>
+            <div class="form-row">
+              <label>Department / Business Unit *</label>
+              <input type="text" placeholder="e.g., Commercial Operations">
+            </div>
+          </div>
+
+          <h3>Request Details</h3>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Request Type *</label>
+              <select>
+                <option>NDA</option>
+                <option>T&amp;Cs</option>
+                <option>Supply</option>
+                <option>Manufacturing</option>
+                <option>Employment</option>
+                <option>Consulting</option>
+                <option>IP</option>
+                <option>Trade Compliance</option>
+                <option>Compliance</option>
+                <option>Privacy</option>
+                <option>Policies</option>
+                <option>Other</option>
+              </select>
+              <small>Select the primary category for your request.</small>
+            </div>
+            <div class="form-row">
+              <label>Need a Form or Requires Review? *</label>
+              <div class="radio-group">
+                <label><input type="radio" name="need" checked> Need a Form</label>
+                <label><input type="radio" name="need"> Requires Review</label>
+              </div>
+              <small>Need a form = provide template; Requires review = route to Legal for analysis.</small>
+            </div>
+            <div class="form-row">
+              <label>Priority (if Requires Review)</label>
+              <select>
+                <option>Routine</option>
+                <option>Important</option>
+                <option>Urgent</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Requested Completion Date</label>
+              <input type="date">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label>Description</label>
+            <textarea placeholder="Provide any relevant context, counterparties, timelines, or business impact."></textarea>
+          </div>
+
+          <div class="form-row">
+            <label>Attachment</label>
+            <input type="file">
+            <small>Upload draft agreements, emails, or supporting documentation (internal only).</small>
+          </div>
+
+          <div class="submit-row">
+            <button class="btn-primary" disabled>Submit Request (Demo Only)</button>
+          </div>
+
+          <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">
+            Minimum required fields: requestor name, title, department/business unit, request type, (if review) priority, requested completion date (if any), and description (if any).
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>Matter Detail &mdash; Example Request</h2>
+          <p>Each matter has a complete history, providing transparency and an auditable trail of legal engagement.</p>
+
+          <div class="detail-grid">
+            <div>
+              <h3>Header</h3>
+              <p style="font-size:13px;">
+                <strong>Matter ID:</strong> MAT-1031<br>
+                <strong>Category:</strong> Employment<br>
+                <strong>Priority:</strong> <span class="pill pill-priority-urgent">Urgent</span><br>
+                <strong>Status:</strong> <span class="pill pill-status-new">New</span><br>
+                <strong>Owner:</strong> S. Patel (Senior Employment Counsel)<br>
+                <strong>Requested Completion Date:</strong> 09/20/2026
+              </p>
+
+              <h3>Requestor Information</h3>
+              <p style="font-size:13px;">
+                <strong>Name:</strong> Jordan Ellis<br>
+                <strong>Title:</strong> HR Manager<br>
+                <strong>Department:</strong> Human Resources
+              </p>
+
+              <h3>Description &amp; Attachments</h3>
+              <p style="font-size:13px;">
+                "Urgent review of termination package for senior leader; alignment with company policies and severance guidelines required."
+              </p>
+              <p style="font-size:13px;">
+                <strong>Attachments:</strong><br>
+                &bull; Termination_Package_Draft.pdf<br>
+                &bull; Role_Profile_Summary.docx
+              </p>
+            </div>
+
+            <div>
+              <h3>Activity Timeline</h3>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <span>09/12/2026 &middot; 2:14 PM</span>
+                  <strong>Request Submitted</strong><br>
+                  <span>Submitted via Legal Ops intake form by Jordan Ellis.</span>
+                </div>
+                <div class="timeline-item">
+                  <span>09/12/2026 &middot; 2:16 PM</span>
+                  <strong>Assigned to S. Patel</strong><br>
+                  <span>Auto-routed based on Employment category and region.</span>
+                </div>
+                <div class="timeline-item">
+                  <span>09/13/2026 &middot; 9:02 AM</span>
+                  <strong>Status Updated: New &rarr; In Progress</strong><br>
+                  <span>Initial review of termination package initiated.</span>
+                </div>
+              </div>
+
+              <h3>Internal Notes (Legal Only)</h3>
+              <p style="font-size:12px;color:var(--text-muted);">
+                Internal notes are restricted to Legal and Legal Operations. Example: risk assessment, negotiation strategy, and precedent references.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: DASHBOARD + MATTERS LIST -->
+      <div>
+        <div class="card">
+          <h2>Legal Operations Dashboard</h2>
+          <p>A centralized view of all open matters, prioritization, and upcoming deadlines for the legal department.</p>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Total Open Matters</div>
+              <div class="kpi-value">42</div>
+            </div>
+            <div class="kpi-card kpi-urgent">
+              <div class="kpi-label">Urgent Matters</div>
+              <div class="kpi-value">7</div>
+            </div>
+            <div class="kpi-card kpi-pastdue">
+              <div class="kpi-label">Past Due Matters</div>
+              <div class="kpi-value">5</div>
+            </div>
+            <div class="kpi-card kpi-upcoming">
+              <div class="kpi-label">Due Within 15 Days</div>
+              <div class="kpi-value">11</div>
+            </div>
+            <div class="kpi-card kpi-awaiting">
+              <div class="kpi-label">Awaiting Review</div>
+              <div class="kpi-value">9</div>
+            </div>
+          </div>
+
+          <p style="font-size:12px;color:var(--text-muted);">
+            Upcoming matters include built-in auto reminders at 5 days remaining and on the day of deadline (optional).
+          </p>
+
+          <h3>Search &amp; Filters</h3>
+          <div class="search-row">
+            <input type="text" placeholder="Search by Matter ID, Requestor, Category, Owner...">
+          </div>
+          <div class="filter-row">
+            <select>
+              <option>Filter by Type</option>
+              <option>NDA</option>
+              <option>T&amp;Cs</option>
+              <option>Supply</option>
+              <option>Manufacturing</option>
+              <option>Employment</option>
+              <option>Consulting</option>
+              <option>IP</option>
+              <option>Trade Compliance</option>
+              <option>Compliance</option>
+              <option>Privacy</option>
+              <option>Policies</option>
+              <option>Other</option>
+            </select>
+            <select>
+              <option>Filter by Priority</option>
+              <option>Routine</option>
+              <option>Important</option>
+              <option>Urgent</option>
+            </select>
+            <select>
+              <option>Filter by Owner</option>
+              <option>J. Rivera</option>
+              <option>S. Patel</option>
+              <option>L. Chen</option>
+              <option>M. O'Donnell</option>
+              <option>A. Greene</option>
+            </select>
+            <select>
+              <option>Filter by Status</option>
+              <option>New</option>
+              <option>In Progress</option>
+              <option>Delayed</option>
+              <option>Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Searchable Matters List</h2>
+          <p>Structured view of all matters with filters by type, priority, deadline, owner, and status.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Matter</th>
+                <th>Type</th>
+                <th>Priority</th>
+                <th>Deadline</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Responsible for Current Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MAT-1024</td>
+                <td>NDA</td>
+                <td><span class="pill pill-priority-routine">Routine</span></td>
+                <td>10/05/2026</td>
+                <td>J. Rivera</td>
+                <td><span class="pill pill-status-progress">In Progress</span></td>
+                <td>J. Rivera</td>
+              </tr>
+              <tr>
+                <td>MAT-1031</td>
+                <td>Employment</td>
+                <td><span class="pill pill-priority-urgent">Urgent</span></td>
+                <td>09/20/2026</td>
+                <td>S. Patel</td>
+                <td><span class="pill pill-status-new">New</span></td>
+                <td>Legal Ops</td>
+              </tr>
+              <tr>
+                <td>MAT-1042</td>
+                <td>IP</td>
+                <td><span class="pill pill-priority-important">Important</span></td>
+                <td>09/30/2026</td>
+                <td>L. Chen</td>
+                <td><span class="pill pill-status-delayed">Delayed</span></td>
+                <td>L. Chen</td>
+              </tr>
+              <tr>
+                <td>MAT-1050</td>
+                <td>Privacy</td>
+                <td><span class="pill pill-priority-routine">Routine</span></td>
+                <td>10/15/2026</td>
+                <td>M. O'Donnell</td>
+                <td><span class="pill pill-status-completed">Completed</span></td>
+                <td>M. O'Donnell</td>
+              </tr>
+              <tr>
+                <td>MAT-1066</td>
+                <td>Trade Compliance</td>
+                <td><span class="pill pill-priority-urgent">Urgent</span></td>
+                <td>09/18/2026</td>
+                <td>A. Greene</td>
+                <td><span class="pill pill-status-progress">In Progress</span></td>
+                <td>A. Greene</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>Overview &amp; Design Notes</h2>
+          <p style="font-size:13px;">
+            This prototype demonstrates a corporate-grade legal operations intake and tracking application for a fictional U.S. publicly traded company.
+            It is designed for internal use by employees and the legal department, not as a consumer-facing product.
+          </p>
+          <h3>Key Features</h3>
+          <ul style="font-size:13px;color:var(--text-muted);padding-left:18px;">
+            <li>Structured intake form with clear categories and routing logic.</li>
+            <li>Status workflow: New, In Progress, Delayed, Completed.</li>
+            <liDashboard metrics: total open, urgent, past due, due within 15 days, awaiting review.</li>
+            <li>Searchable matters list with filters by type, priority, deadline, owner, and status.</li>
+            <li>Matter detail page with full history and internal notes.</li>
+          </ul>
+          <h3>Visual Style</h3>
+          <p style="font-size:13px;color:var(--text-muted);">
+            Palette: navy, slate, white, steel gray. Typography: system UI / Segoe UI. Card-based layout, subtle shadows, and pill-style indicators for priority and status to reflect a modern corporate legal environment.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Fictional demo for legal operations &middot; Designed for public viewing (e.g., LinkedIn) &middot; No real data.
+    </footer>
+  </div>
+</body>
+</html>
